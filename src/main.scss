@@ -1,0 +1,93 @@
+@forward 'scss/theme';
+
+@use 'scss/mixins/typography';
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    --offset: 156px;
+    --columns: 12;
+
+    display: grid;
+    grid-template-columns: var(--offset) repeat(var(--columns), 1fr) var(--offset);
+    grid-auto-rows: min-content;
+    grid-auto-flow: row;
+    column-gap: 24px;
+
+    background-color: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-background);
+
+    &>* {
+        --_column: var(--column, 2/-2);
+
+        grid-column: var(--_column);
+        display: grid;
+        grid-template-columns: subgrid;
+    }
+}
+
+.hero-section {
+    --column: 1/-1;
+
+    height: 100dvh;
+    padding-top: 100px;
+    box-sizing: border-box;
+
+    background: url(https://s3-alpha-sig.figma.com/img/3989/7224/4c6070a2ebc9aad8326664f7dcfe1798?Expires=1701648000&Signature=VdpZq6o6UDhKaf2RXFTwE3CoRCf7nxOFM6xqDMsae9WAE2sDRLROtXBr3J9K-difvRTSCZDxEVMfQt8h9fUufXn0oQKF0XoGXnMU9NwEJ4VGnErcqaBB73jeidwhH10nHc~B6jKxZ25N20MPxmQw2VxYIO0uAsiap1v3tgDSV8YxiOvnlMUFu3rISBc67rNNcD1GrUELgpW4bnBIUAraCCfnUvvcDnykUzL4NRBeAyRYZg6L8nRv-LYfRAylpfF-yglUHzqD58noQBc5uIg4bQ9mb52K0Gi7TMFkoIRq1MDOUH6bj9GQJg64vx4w4t5hTwpTe3YNbUrZBbgm11vCKA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4);
+    background-size: cover;
+    background-position: right;
+
+    &__wrapper {
+        grid-column: 2/8;
+        display: grid;
+        grid-template-columns: subgrid;
+    }
+
+    &__info {
+        grid-column: 1/-1;
+        display: flex;
+        flex-direction: column;
+        gap: 128px;
+        justify-content: center;
+
+        &__heading {
+            color: var(--md-sys-color-on-primary);
+
+            &__title {
+                margin: 0;
+                @include typography.display-large;
+            }
+
+            &__supporting-text {
+                margin: 0;
+                @include typography.headline-large;
+            }
+        }
+    }
+}
+
+.button {
+    display: flex;
+    padding: 24px 64px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+    background-color: var(--md-sys-color-primary);
+    @include typography.display-medium;
+    color: var(--md-sys-color-on-primary);
+}
+
+.section-one {
+    &__thumbnail {
+        
+    }
+
+    &__content {
+
+    }
+}

@@ -1,6 +1,20 @@
 @forward 'scss/theme';
 
+@use 'sass:math';
 @use 'scss/mixins/typography';
+
+$spacing-min: 16px;
+$spacing-max: 32px;
+$offset-max: 200px;
+
+$breakpoint-content: 800px;
+$content-column-size: math.div($breakpoint-content - 11 * $spacing-max, 12);
+
+$breakpoint-medium: 600px;
+$breakpoint-expanded: 840px;
+
+$breakpoint-content-min: $breakpoint-content + $spacing-max * 2;
+$breakpoint-content-max: $breakpoint-content-min + $offset-max * 2;
 
 html,
 body {
@@ -9,24 +23,107 @@ body {
 }
 
 body {
-    --offset: 156px;
-    --columns: 12;
+    --offset: 0;
+    --columns: 4;
+    --spacing: #{$spacing-min};
+    --column-size: 1fr;
 
     display: grid;
-    grid-template-columns: var(--offset) repeat(var(--columns), 1fr) var(--offset);
+    grid-template-columns: [container-start] var(--offset) [content-start] repeat(var(--columns), var(--column-size)) [content-end] var(--offset) [container-end];
     grid-auto-rows: min-content;
     grid-auto-flow: row;
-    column-gap: 24px;
+    column-gap: var(--spacing);
 
     background-color: var(--md-sys-color-background);
     color: var(--md-sys-color-on-background);
 
-    &>* {
-        --_column: var(--column, 2/-2);
+    @include typography.body-medium;
 
-        grid-column: var(--_column);
+    @media(min-width: $breakpoint-medium) {
+        --columns: 8;
+        --spacing: #{$spacing-max};
+    }
+
+    @media(min-width: $breakpoint-expanded) {
+        --columns: 12;
+    }
+
+    @media(min-width: $breakpoint-content-min) {
+        --offset: 1fr;
+        --column-size: #{$content-column-size};
+    }
+
+    @media(min-width: $breakpoint-content-max) {
+        --offset: #{$offset-max};
+        --column-size: 1fr;
+    }
+}
+
+.section {
+    grid-column: content;
+
+    padding-block: 32px;
+    z-index: 0;
+
+    &--wide {
+        grid-column: container;
         display: grid;
         grid-template-columns: subgrid;
+
+        &__content {
+            grid-column: content;
+        }
+    }
+
+    &--main {
+        padding: unset;
+        background-color: var(--md-sys-color-background);
+    }
+
+    &--green {
+        background-color: green;
+    }
+
+    &--blue {
+        background-color: blue;
+    }
+
+    &--yellow {
+        background-color: lightyellow;
+    }
+}
+
+.parallax {
+    grid-template-columns: unset;
+    grid-template-areas: 'scroll';
+    place-items: center;
+    padding: unset;
+    z-index: 0;
+
+    &>* {
+        grid-area: scroll;
+        animation: parallax linear;
+        animation-timeline: scroll();
+    }
+
+    &__background {
+        --parallax-speed: 5;
+
+        object-fit: cover;
+        width: 100%;
+        min-height: 75dvh;
+    }
+
+    &__logo {
+        --parallax-speed: 2;
+
+        width: 50vw;
+    }
+}
+
+@keyframes parallax {
+    to {
+        transform: translateY(calc(var(--parallax-speed) * 100px));
     }
 }
 
@@ -80,14 +177,4 @@ body {
     background-color: var(--md-sys-color-primary);
     @include typography.display-medium;
     color: var(--md-sys-color-on-primary);
-}
-
-.section-one {
-    &__thumbnail {
-        
-    }
-
-    &__content {
-
-    }
 }
